@@ -1,0 +1,2 @@
+include {{ name }}/config.yaml
+recursive-include {{ name }}/static *
