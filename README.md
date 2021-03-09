@@ -4,9 +4,9 @@
 	- The purpose of this plugin is to autotune your System and determine automatically P, I and D values to optimize the heating for your system.
 	- The derived values have to be entered later in your PID Kettle Logic.
 	- For more info on PID and autotuning, you can check out the following articles:
+    - (https://github.com/Manuel83/craftbeerpi/wiki/Autotune-PID)
+    - (https://github.com/Manuel83/craftbeerpi/wiki/Manual-PID-adjustment)
 
-    (https://github.com/Manuel83/craftbeerpi/wiki/Autotune-PID)
-    (https://github.com/Manuel83/craftbeerpi/wiki/Manual-PID-adjustment)
 
 - Installation:
 	- pip install cbpi4-PID-AutoTune (Alternativeley you can clone it from the GIT Repo)
@@ -26,6 +26,7 @@
 	- Enter the parameters with the default values or change them to your needs as shown in the image below.
 	
 ![PIDAutoTune Settings](https://github.com/avollkopf/cbpi4-PID_AutoTune/blob/main/Settings_Autotune.png?raw=true)
+
 
 	- Go tou your cbpi4 dashboard and add a Kettle and KettleLogic.
 	- You should run the Autotune as realistic as possible.
