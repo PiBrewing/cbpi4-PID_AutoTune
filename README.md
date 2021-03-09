@@ -25,7 +25,7 @@
 	- Select the Heater, Agitator and Sensor for your Kettle
 	- Enter the parameters with the default values or change them to your needs as shown in the image below.
 	
-![PIDAutoTune Settings](https://github.com/avollkopf/cbpi4-PID_AutoTune/blob/main/Settings_AutoTune.png?raw=true)
+![PIDAutoTune Settings](https://github.com/avollkopf/cbpi4-PID_AutoTune/blob/main/Settings_Autotune.png?raw=true)
 
 	- Go tou your cbpi4 dashboard and add a Kettle and KettleLogic.
 	- You should run the Autotune as realistic as possible.
