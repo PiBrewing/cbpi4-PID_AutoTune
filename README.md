@@ -31,11 +31,11 @@
 	- Go tou your cbpi4 dashboard and add a Kettle and KettleLogic.
 	- You should run the Autotune as realistic as possible.
 		- Therefore you should at least use the typical amount of water you are using also for a mash
-		- Set a Kettle temperature via the Kettle Logic. I selected for instance 67°C which is somehow between the typical mash temps of 62°C and 73°C
+		- Set a Kettle temperature via the Kettle Logic. I selected for instance 67C which is somehow between the typical mash temps of 62C and 73C
 		- In my case I added even malt which is easy with the braumeister malt pipe as I just added the pipe back into the kettle after a full brewing step and was using the same amount of water
 	- Start the automatic Kettle Logic and have a beer as it'll take sme thime. The system will heat up to the setpioint and overshoots intentionally.
 	- If you are having a pump in your system or other agitators that may impact the heating cycle, you should run them also during the Autotune process
-	- It is waiting until the temp is going down 0.5°C below the target value.
+	- It is waiting until the temp is going down 0.5C below the target value.
 	- Then it is repeating this procedure several times.
 	- While running, it is writing a log file into the logs directory -> autotune.log
 	- If successfull, the P, I and D values are listed in the log file and a message is displayed in the dashboard. 
