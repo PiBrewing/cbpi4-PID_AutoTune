@@ -19,7 +19,7 @@
 	- Max Outpuz: Defines the maximum outpout power in % you are using with your system. Default is 100%.
 	- Lockback Seconds: Defines the time in seconds how far the routine is locking back to identify temperature peaks. 30 seconds is typical.
 	
-- Usage:
+- Hardware Setup:
 	- After installation go to hardware settings
 	- Select PIDAutoTune as Kettle logic.
 	- Select the Heater, Agitator and Sensor for your Kettle
@@ -27,7 +27,7 @@
 	
 ![PIDAutoTune Settings](https://github.com/avollkopf/cbpi4-PID_AutoTune/blob/main/Settings_Autotune.png?raw=true)
 
-
+- Usage:
 	- Go tou your cbpi4 dashboard and add a Kettle and KettleLogic.
 	- You should run the Autotune as realistic as possible.
 		- Therefore you should at least use the typical amount of water you are using also for a mash
