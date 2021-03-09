@@ -1,2 +1,2 @@
-include {{ name }}/config.yaml
-recursive-include {{ name }}/static *
+include cbpi4-PID_AutoTune/config.yaml
+recursive-include cbpi4-PID_AutoTune/static *
