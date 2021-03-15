@@ -15,7 +15,7 @@ from socket import timeout
 from typing import KeysView
 
 from voluptuous.schema_builder import message
-from cbpi.api.dataclasses import NotificationAction
+from cbpi.api.dataclasses import NotificationAction, NotificationType
 
 @parameters([Property.Number(label = "Output_Step", configurable = True, default_value = 100, description="Default: 100. Sets the output when stepping up/down."),
              Property.Number(label = "Max_Output", configurable = True, default_value = 100, description="Default: 100. Sets the max power output."),
@@ -24,18 +24,18 @@ from cbpi.api.dataclasses import NotificationAction
 class PIDAutotune(CBPiKettleLogic):
 
     async def autoOff(self):
-        self.cbpi.notify(title='PID AutoTune', message='Succesfully tuned Kettle', type='succes')
+        self.cbpi.notify('PID AutoTune', 'Succesfully tuned Kettle', NotificationType.SUCCESS)
         self.finished=True
 
     async def on_stop(self):
         if self.finished == False:
-            self.cbpi.notify(title='PID AutoTune', message='Process stopped Manually. Please run Autotune again.', type='error')
+            self.cbpi.notify('PID AutoTune', 'Process stopped Manually. Please run Autotune again.', NotificationType.ERROR)
     
     async def run(self):
         self.finished = False
         self._logger = logging.getLogger(type(self).__name__)
         
-        self.cbpi.notify(title='PID AutoTune', message='AutoTune In Progress. Do not turn off Auto mode until AutoTuning is complete', type='info')
+        self.cbpi.notify('PID AutoTune', 'AutoTune In Progress. Do not turn off Auto mode until AutoTuning is complete', NotificationType.INFO)
         
         sampleTime = 5
         wait_time = 5
@@ -48,12 +48,12 @@ class PIDAutotune(CBPiKettleLogic):
         try:
             atune = AutoTuner(setpoint, outstep, sampleTime, lookbackSec, 0, outmax)
         except Exception as e:
-            self.cbpi.notify(title='PID autoTune', message='AutoTune Error: {}'.format(str(e)),type='error')
+            self.cbpi.notify('PID autoTune', 'AutoTune Error: {}'.format(str(e)),NotificationType.ERROR)
             atune.log(str(e))
             await self.autoOff()
         atune.log("AutoTune will now begin")
         
-        while True and not atune.run(self.get_sensor_value(self.kettle.sensor).get("value")):
+        while self.running == True and not atune.run(self.get_sensor_value(self.kettle.sensor).get("value")):
             heat_percent = atune.output
             heating_time = sampleTime * heat_percent / 100
             wait_time = sampleTime - heating_time
@@ -72,7 +72,7 @@ class PIDAutotune(CBPiKettleLogic):
         
         if atune.state == atune.STATE_SUCCEEDED:
             atune.log("AutoTune has succeeded")
-            self.cbpi.notify(title='PID AutoTune', message='AutoTune Complete. PID AutoTune was successful', type='success')
+            self.cbpi.notify('PID AutoTune', 'AutoTune Complete. PID AutoTune was successful', NotificationType.SUCCESS)
             for rule in atune.tuningRules:
                 params = atune.getPIDParameters(rule)
                 atune.log('rule: {0}'.format(rule))
@@ -80,10 +80,10 @@ class PIDAutotune(CBPiKettleLogic):
                 atune.log('I: {0}'.format(params.Ki))
                 atune.log('D: {0}'.format(params.Kd))
                 if rule == "brewing":
-                    self.cbpi.notify(title='AutoTune has succeeded',message="P Value: %.8f | I Value: %.8f | D Value: %.8f" % (params.Kp, params.Ki, params.Kd),action=[NotificationAction("OK")])
+                    self.cbpi.notify('AutoTune has succeeded',"P Value: %.8f | I Value: %.8f | D Value: %.8f" % (params.Kp, params.Ki, params.Kd),action=[NotificationAction("OK")])
         elif atune.state == atune.STATE_FAILED:
            atune.log("AutoTune has failed")
-           self.cbpi.notify(title='PID AutoTune Error', message="PID AutoTune has failed",action=[NotificationAction("OK")])
+           self.cbpi.notify('PID AutoTune Error', "PID AutoTune has failed",action=[NotificationAction("OK")])
 
 # Based on a fork of Arduino PID AutoTune Library
 # See https://github.com/t0mpr1c3/Arduino-PID-AutoTune-Library

@@ -43,4 +43,6 @@
 	
 ![PIDAutoTune Results](https://github.com/avollkopf/cbpi4-PID_AutoTune/blob/main/AutoTune.png?raw=true)	
 	
+Changelog:
 
+15.03.21: Support for cbpi >= 4.0.0.32
