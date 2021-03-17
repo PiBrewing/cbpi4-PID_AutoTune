@@ -19,6 +19,9 @@ setup(name='cbpi4-PID_AutoTune',
       '': ['*.txt', '*.rst', '*.yaml'],
       'cbpi4-PID_AutoTune': ['*','*.txt', '*.rst', '*.yaml']},
       packages=['cbpi4-PID_AutoTune'],
+      install_requires=[
+            'cbpi>=4.0.0.33',
+      ],
       long_description=long_description,
       long_description_content_type='text/markdown'
       )

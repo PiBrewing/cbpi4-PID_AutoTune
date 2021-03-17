@@ -12,7 +12,7 @@
 	- pip install cbpi4-PID-AutoTune (Alternativeley you can clone it from the GIT Repo)
 	- cbpi add cbpi4-PID_AutoTune
 	
-	- cbpi >= 4.0.0.31 is required
+	- cbpi >= 4.0.0.33 is required
 	
 - Parameters:	
 	- Output Step: Defines the output power in % used for steps to ramp up to a temperature. Default is 100%.
@@ -45,4 +45,4 @@
 	
 Changelog:
 
-15.03.21: Support for cbpi >= 4.0.0.32
+15.03.21: Support for cbpi >= 4.0.0.33
