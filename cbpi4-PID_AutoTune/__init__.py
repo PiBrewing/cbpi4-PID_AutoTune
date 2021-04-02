@@ -26,11 +26,15 @@ class PIDAutotune(CBPiKettleLogic):
     async def autoOff(self):
         self.cbpi.notify('PID AutoTune', 'Succesfully tuned Kettle', NotificationType.SUCCESS)
         self.finished=True
+        await self.actor_off(self.heater)
+        self.running = False
 
     async def on_stop(self):
         if self.finished == False:
             self.cbpi.notify('PID AutoTune', 'Process stopped Manually. Please run Autotune again.', NotificationType.ERROR)
-    
+        await self.actor_off(self.heater)
+        self.running = False
+
     async def run(self):
         self.finished = False
         self._logger = logging.getLogger(type(self).__name__)

@@ -45,4 +45,8 @@
 	
 Changelog:
 
+**02.04.21 (0.0.4):
+
+- Bug fixing
+
 15.03.21: Support for cbpi >= 4.0.0.33
