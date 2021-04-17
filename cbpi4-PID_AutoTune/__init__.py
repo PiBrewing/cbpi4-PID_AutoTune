@@ -19,7 +19,7 @@ from cbpi.api.dataclasses import NotificationAction, NotificationType
 
 @parameters([Property.Number(label = "Output_Step", configurable = True, default_value = 100, description="Default: 100. Sets the output when stepping up/down."),
              Property.Number(label = "Max_Output", configurable = True, default_value = 100, description="Default: 100. Sets the max power output."),
-             Property.Number(label = "lockback_seconds", configurable = True, default_value = 60, description="Default: 30. How far back to look for min/max temps.")])
+             Property.Number(label = "lockback_seconds", configurable = True, default_value = 30, description="Default: 30. How far back to look for min/max temps.")])
 
 class PIDAutotune(CBPiKettleLogic):
 
@@ -43,9 +43,9 @@ class PIDAutotune(CBPiKettleLogic):
         
         sampleTime = 5
         wait_time = 5
-        outstep = float(self.props.Output_Step)
-        outmax = float(self.props.Max_Output)
-        lookbackSec = float(self.props.lockback_seconds)
+        outstep = float(self.props.get("Output_Step", 100))
+        outmax = float(self.props.get("Max_Output", 100))
+        lookbackSec = float(self.props.get("lockback_seconds", 30))
         self.kettle = self.get_kettle(self.id)
         self.heater = self.kettle.heater
         setpoint = int(self.get_kettle_target_temp(self.id))
