@@ -9,15 +9,23 @@
 
 
 - Installation:
-	- pip install cbpi4-PID-AutoTune (Alternativeley you can clone it from the GIT Repo)
+	You can install it directly via pypi.org:	
+	- sudo pip3 install cbpi4-PID-AutoTune 
+
+	Alternativeley you can install (or clone) it from the GIT Repo. In case of updates, you will find them here first:
+	- sudo pip3 install https://github.com/avollkopf/cbpi4-PID_AutoTune/archive/main.zip
+
+	Afterwards you will need to activate the plugin:
 	- cbpi add cbpi4-PID_AutoTune
 	
 	- cbpi >= 4.0.0.33 is required
+
+	Important: Don't mix up the '-' and '_'
 	
 - Parameters:	
 	- Output Step: Defines the output power in % used for steps to ramp up to a temperature. Default is 100%.
 	- Max Outpuz: Defines the maximum outpout power in % you are using with your system. Default is 100%.
-	- Lockback Seconds: Defines the time in seconds how far the routine is locking back to identify temperature peaks. 30 seconds is typical.
+	- Lockback Seconds: Defines the time in seconds how far the routine is locking back to identify temperature peaks. 30 seconds is typical. If you experience issues, increase the time (e.g. 60 seconds)
 	
 - Hardware Setup:
 	- After installation go to hardware settings
@@ -33,7 +41,7 @@
 		- Therefore you should at least use the typical amount of water you are using also for a mash
 		- Set a Kettle temperature via the Kettle Logic. I selected for instance 67C which is somehow between the typical mash temps of 62C and 73C
 		- In my case I added even malt which is easy with the braumeister malt pipe as I just added the pipe back into the kettle after a full brewing step and was using the same amount of water
-	- Start the automatic Kettle Logic and have a beer as it'll take sme thime. The system will heat up to the setpioint and overshoots intentionally.
+	- Start the automatic Kettle Logic (Click on the car symbol) and have a beer as it'll take sme thime. The system will heat up to the setpoint and overshoots intentionally.
 	- If you are having a pump in your system or other agitators that may impact the heating cycle, you should run them also during the Autotune process
 	- It is waiting until the temp is going down 0.5C below the target value.
 	- Then it is repeating this procedure several times.
@@ -45,8 +53,6 @@
 	
 Changelog:
 
-**02.04.21 (0.0.4):
-
-- Bug fixing
-
-15.03.21: Support for cbpi >= 4.0.0.33
+- 15.11.21: (0.0.5): Updated README 
+- 02.04.21: (0.0.4): Bug fixing
+- 15.03.21: Support for cbpi >= 4.0.0.33
