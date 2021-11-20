@@ -24,10 +24,8 @@ from cbpi.api.dataclasses import NotificationAction, NotificationType
 class PIDAutotune(CBPiKettleLogic):
 
     async def autoOff(self):
-        self.cbpi.notify('PID AutoTune', 'Succesfully tuned Kettle', NotificationType.SUCCESS)
         self.finished=True
-        await self.actor_off(self.heater)
-        self.running = False
+
 
     async def on_stop(self):
         if self.finished == False:
@@ -49,6 +47,7 @@ class PIDAutotune(CBPiKettleLogic):
         self.kettle = self.get_kettle(self.id)
         self.heater = self.kettle.heater
         setpoint = int(self.get_kettle_target_temp(self.id))
+        heat_percent_old = 100
         try:
             atune = AutoTuner(setpoint, outstep, sampleTime, lookbackSec, 0, outmax)
         except Exception as e:
@@ -56,38 +55,41 @@ class PIDAutotune(CBPiKettleLogic):
             atune.log(str(e))
             await self.autoOff()
         atune.log("AutoTune will now begin")
+
+        try:
+            await self.actor_on(self.heater, heat_percent_old)
+            while self.running == True and not atune.run(self.get_sensor_value(self.kettle.sensor).get("value")):
+                heat_percent = atune.output
+                if heat_percent != heat_percent_old:
+                    await self.actor_set_power(self.heater,heat_percent)
+                    heat_percent_old = heat_percent
+                await asyncio.sleep(sampleTime)
+
+            await self.autoOff()
         
-        while self.running == True and not atune.run(self.get_sensor_value(self.kettle.sensor).get("value")):
-            heat_percent = atune.output
-            heating_time = sampleTime * heat_percent / 100
-            wait_time = sampleTime - heating_time
-            if heating_time == sampleTime:
-                await self.actor_on(self.heater)
-                await asyncio.sleep(heating_time)
-            elif wait_time == sampleTime:
-                await self.actor_off(self.heater)
-                await asyncio.sleep(wait_time)
-            else:
-                await self.actor_on(self.heater)
-                await asyncio.sleep(heating_time)
-                await self.actor_off(self.heater)
-                await asyncio.sleep(wait_time)
-        await self.autoOff()
-        
-        if atune.state == atune.STATE_SUCCEEDED:
-            atune.log("AutoTune has succeeded")
-            self.cbpi.notify('PID AutoTune', 'AutoTune Complete. PID AutoTune was successful', NotificationType.SUCCESS)
-            for rule in atune.tuningRules:
-                params = atune.getPIDParameters(rule)
-                atune.log('rule: {0}'.format(rule))
-                atune.log('P: {0}'.format(params.Kp))
-                atune.log('I: {0}'.format(params.Ki))
-                atune.log('D: {0}'.format(params.Kd))
-                if rule == "brewing":
-                    self.cbpi.notify('AutoTune has succeeded',"P Value: %.8f | I Value: %.8f | D Value: %.8f" % (params.Kp, params.Ki, params.Kd),action=[NotificationAction("OK")])
-        elif atune.state == atune.STATE_FAILED:
-           atune.log("AutoTune has failed")
-           self.cbpi.notify('PID AutoTune Error', "PID AutoTune has failed",action=[NotificationAction("OK")])
+            if atune.state == atune.STATE_SUCCEEDED:
+                atune.log("AutoTune has succeeded")
+                for rule in atune.tuningRules:
+                    params = atune.getPIDParameters(rule)
+                    atune.log('rule: {0}'.format(rule))
+                    atune.log('P: {0}'.format(params.Kp))
+                    atune.log('I: {0}'.format(params.Ki))
+                    atune.log('D: {0}'.format(params.Kd))
+                    if rule == "brewing":
+                        self.cbpi.notify('AutoTune has succeeded',"P Value: %.8f | I Value: %.8f | D Value: %.8f" % (params.Kp, params.Ki, params.Kd),action=[NotificationAction("OK")])
+            elif atune.state == atune.STATE_FAILED:
+                atune.log("AutoTune has failed")
+                self.cbpi.notify('PID AutoTune Error', "PID AutoTune has failed",action=[NotificationAction("OK")])
+
+        except asyncio.CancelledError as e:
+            pass
+        except Exception as e:
+            logging.error("PIDAutoTune Error {}".format(e))
+            pass
+        finally:
+            await self.actor_off(self.heater)
+            await self.stop()
+            pass
 
 # Based on a fork of Arduino PID AutoTune Library
 # See https://github.com/t0mpr1c3/Arduino-PID-AutoTune-Library
