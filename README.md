@@ -53,7 +53,7 @@
 	
 Changelog:
 
-- 20.11.21: (0.0.6): Switch heater off at end of autotune. Usage if power settings (cbpi >= 4.0.0.45 required)
+- 20.11.21: (0.0.6): Switch heater off at end of autotune. Usage of power settings (cbpi >= 4.0.0.45 required)
 - 15.11.21: (0.0.5): Updated README 
 - 02.04.21: (0.0.4): Bug fixing
 - 15.03.21: Support for cbpi >= 4.0.0.33
