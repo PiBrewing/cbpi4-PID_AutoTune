@@ -85,6 +85,8 @@ class PIDAutotune(CBPiKettleLogic):
             pass
         except Exception as e:
             logging.error("PIDAutoTune Error {}".format(e))
+            await self.actor_off(self.heater)
+            await self.stop()
             pass
         finally:
             await self.actor_off(self.heater)
