@@ -23,6 +23,11 @@ from cbpi.api.dataclasses import NotificationAction, NotificationType
 
 class PIDAutotune(CBPiKettleLogic):
 
+    def __init__(self, cbpi, id, props):
+        super().__init__(cbpi, id, props)
+        self._logger = logging.getLogger(type(self).__name__)
+
+
     async def autoOff(self):
         self.finished=True
 
@@ -35,8 +40,28 @@ class PIDAutotune(CBPiKettleLogic):
 
     async def run(self):
         self.finished = False
-        self._logger = logging.getLogger(type(self).__name__)
-        
+        self.kettle = self.get_kettle(self.id)
+        self.heater = self.kettle.heater
+        self.TEMP_UNIT=self.get_config_value("TEMP_UNIT", "C")
+        fixedtarget = 67 if self.TEMP_UNIT == "C" else 153
+        setpoint = int(self.get_kettle_target_temp(self.id))
+        current_value=self.get_sensor_value(self.kettle.sensor).get("value")
+
+        if setpoint == 0:
+            if fixedtarget < current_value:
+                self.cbpi.notify('PID AutoTune', 'You have not defined a target temp and current temp is above fallback value of {} °{}. Please choose target temp above current temp or wait until systme has cooled down.'.format(fixedtarget,self.TEMP_UNIT), NotificationType.ERROR)
+                await self.actor_off(self.heater)
+                await self.stop()
+            self.cbpi.notify('PID AutoTune', 'You have not defined a target temp. System will set target to {} °{} and start AutoTune'.format(fixedtarget,self.TEMP_UNIT), NotificationType.WARNING)
+            setpoint=fixedtarget
+            await self.set_target_temp(self.id,setpoint)
+    
+        if setpoint < current_value:
+            self.cbpi.notify('PID AutoTune', 'Your target temp is above the current temp. Choose a higher setpoint or wait until temp temp is below target temp and restart AutoTune', NotificationType.ERROR)
+            await self.actor_off(self.heater)
+            await self.stop()
+            pass
+
         self.cbpi.notify('PID AutoTune', 'AutoTune In Progress. Do not turn off Auto mode until AutoTuning is complete', NotificationType.INFO)
         
         sampleTime = 5
@@ -44,9 +69,6 @@ class PIDAutotune(CBPiKettleLogic):
         outstep = float(self.props.get("Output_Step", 100))
         outmax = float(self.props.get("Max_Output", 100))
         lookbackSec = float(self.props.get("lockback_seconds", 30))
-        self.kettle = self.get_kettle(self.id)
-        self.heater = self.kettle.heater
-        setpoint = int(self.get_kettle_target_temp(self.id))
         heat_percent_old = 100
         try:
             atune = AutoTuner(setpoint, outstep, sampleTime, lookbackSec, 0, outmax)
