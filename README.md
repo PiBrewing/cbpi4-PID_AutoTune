@@ -53,7 +53,8 @@
 	
 Changelog:
 
-- 09.02.22: (0.0.7): Added default target temp in case user did not choose target temp and alarm if target temp is below current temp
+- 10.02.22: (0.0.8): Fix to display correct power in actor button and mqtt when process is starting
+- 09.02.22: (0.0.7): Added default target temp in case user did not choose target tamp and alarm if target temp is below current temp
 - 20.11.21: (0.0.6): Switch heater off at end of autotune. Usage of power settings (cbpi >= 4.0.0.45 required)
 - 15.11.21: (0.0.5): Updated README 
 - 02.04.21: (0.0.4): Bug fixing

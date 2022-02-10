@@ -69,7 +69,7 @@ class PIDAutotune(CBPiKettleLogic):
         outstep = float(self.props.get("Output_Step", 100))
         outmax = float(self.props.get("Max_Output", 100))
         lookbackSec = float(self.props.get("lockback_seconds", 30))
-        heat_percent_old = 100
+        heat_percent_old = 0
         try:
             atune = AutoTuner(setpoint, outstep, sampleTime, lookbackSec, 0, outmax)
         except Exception as e:
