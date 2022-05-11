@@ -15,12 +15,6 @@
 	Alternativeley you can install (or clone) it from the GIT Repo. In case of updates, you will find them here first:
 	- sudo pip3 install https://github.com/avollkopf/cbpi4-PID_AutoTune/archive/main.zip
 
-	Afterwards you will need to activate the plugin:
-	- cbpi add cbpi4-PID_AutoTune
-	
-	- cbpi >= 4.0.0.45 is required
-
-	Important: Don't mix up the '-' and '_'
 	
 - Parameters:	
 	- Output Step: Defines the output power in % used for steps to ramp up to a temperature. Default is 100%.
@@ -53,6 +47,7 @@
 	
 Changelog:
 
+- 11.05.22: (0.0.10) Updated README (removed cbpi add)
 - 10.05.22: (0.0.9) Removed cbpi dependency
 - 10.02.22: (0.0.8): Fix to display correct power in actor button and mqtt when process is starting
 - 09.02.22: (0.0.7): Added default target temp in case user did not choose target tamp and alarm if target temp is below current temp
