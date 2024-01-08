@@ -9,11 +9,11 @@
 
 
 - Installation:
-	You can install it directly via pypi.org:	
-	- sudo pip3 install cbpi4-PID-AutoTune 
 
-	Alternativeley you can install (or clone) it from the GIT Repo. In case of updates, you will find them here first:
-	- sudo pip3 install https://github.com/avollkopf/cbpi4-PID_AutoTune/archive/main.zip
+Please have a look at the [Craftbeerpi4 Documentation](https://openbrewing.gitbook.io/craftbeerpi4_support/readme/plugin-installation)
+
+- Package name: cbpi4-pid-autotune
+- Package link: https://github.com/PiBrewing/cbpi4-PID_AutoTune/archive/main.zip
 
 	
 - Parameters:	
